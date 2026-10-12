@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CINCO™ Pocket Watch · for Nick</title>
+<meta name="description" content="A CINCO Corporation Product. Time, Now With More Time. A fictional pocket watch for Nick.">
+<meta name="theme-color" content="#120d07">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CINCO Watch">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preload" href="fonts/Cinzel.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="bg" aria-hidden="true"></div>
+<header class="top">
+  <button class="logo" id="logo" aria-label="CINCO Corporation logo">CINCO<sup>™</sup></button>
+  <div class="title"><b>Pocket Watch</b><small id="greet">Good evening, Nick. Time, Now With More Time.</small></div>
+  <div class="seg" role="group" aria-label="Display mode">
+    <button id="m-analog" aria-pressed="true">Analog</button>
+    <button id="m-digital" aria-pressed="false">Digital</button>
+  </div>
+</header>
+<div class="ticker" aria-hidden="true"><div class="ticker-in" id="ticker"></div></div>
+<button class="recall-btn" id="recall-btn" aria-label="Open recall notices">⚠ RECALL NOTICES</button>
+
+<main>
+<section class="stage" id="stage">
+  <div class="fob" aria-hidden="true"></div>
+  <div class="pendulum" id="pendulum">
+    <svg class="chain" id="chain" viewBox="0 0 24 64" aria-hidden="true"><defs><linearGradient id="cg" x1="0" x2="1"><stop offset="0" stop-color="#6e4d1c"/><stop offset=".45" stop-color="#fff1c4"/><stop offset="1" stop-color="#8a6428"/></linearGradient><linearGradient id="cg2" x1="0" x2="1"><stop offset="0" stop-color="#8a6428"/><stop offset=".5" stop-color="#f6dc9c"/><stop offset="1" stop-color="#5f4218"/></linearGradient></defs><ellipse cx="12" cy="7" rx="5.5" ry="5" fill="none" stroke="url(#cg)" stroke-width="2.6"/><rect x="10.6" y="9" width="2.8" height="11" rx="1.4" fill="url(#cg2)"/><ellipse cx="12" cy="21" rx="5.5" ry="5" fill="none" stroke="url(#cg)" stroke-width="2.6"/><rect x="10.6" y="23" width="2.8" height="11" rx="1.4" fill="url(#cg2)"/><ellipse cx="12" cy="35" rx="5.5" ry="5" fill="none" stroke="url(#cg)" stroke-width="2.6"/><rect x="10.6" y="37" width="2.8" height="11" rx="1.4" fill="url(#cg2)"/><ellipse cx="12" cy="49" rx="5.5" ry="5" fill="none" stroke="url(#cg)" stroke-width="2.6"/><rect x="10.6" y="51" width="2.8" height="11" rx="1.4" fill="url(#cg2)"/><ellipse cx="12" cy="63" rx="5.5" ry="5" fill="none" stroke="url(#cg)" stroke-width="2.6"/></svg>
+    <div class="bow" aria-hidden="true"></div>
+    <div class="crown" id="crown" role="slider" tabindex="0" aria-label="Crown: tap to open the lid, drag sideways to wind, double-tap to pull out and set the time, long-press for the minute repeater" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><div class="knurl" id="knurl"></div></div>
+    <div class="watch" id="watch">
+      <canvas id="wc" aria-label="Analog pocket watch face" role="img"></canvas>
+      <div class="spec" aria-hidden="true"><i id="spec"></i></div>
+      <div class="hinge" aria-hidden="true"></div>
+      <div class="lid" id="lid">
+        <canvas class="lid-front" id="lid-front" aria-hidden="true"></canvas>
+        <canvas class="lid-back" id="lid-back" aria-hidden="true"></canvas>
+        <div class="lid-spec" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+  <div class="digital" id="digital" hidden>
+    <div class="dig-frame">
+      <div class="dig-brand">CINCO <span>NIXIE-FWIP 5000</span></div>
+      <div class="nixie" id="nixie"></div>
+      <svg class="lcd" id="lcd" viewBox="0 0 560 150" hidden></svg>
+      <div class="dig-sub" id="dig-sub">FRI · LOCAL · RES 100%</div>
+      <div class="dig-bar"><i id="dig-bar"></i></div>
+      <div class="dig-row">
+        <button id="dig-style">Switch to LCD</button>
+        <button id="dig-24">12 / 24 h</button>
+      </div>
+    </div>
+  </div>
+  <p class="status" id="status" aria-live="polite">Press the crown, Sir.</p>
+  <div class="quick">
+    <button id="q-lid">Open lid</button>
+    <button id="q-wind">Wind</button>
+    <button id="q-rep">Repeater</button>
+    <button id="q-skel">Skeleton</button>
+    <button id="q-hyp">Hypnosis</button>
+    <button id="q-sync">Sync</button>
+  </div>
+</section>
+
+<nav class="tabs" role="tablist" aria-label="Sections">
+  <button role="tab" data-tab="watch" aria-selected="true">Watch</button>
+  <button role="tab" data-tab="timers" aria-selected="false">Timers</button>
+  <button role="tab" data-tab="world" aria-selected="false">World</button>
+  <button role="tab" data-tab="cinco" aria-selected="false">CINCO</button>
+  <button role="tab" data-tab="hotline" aria-selected="false">Hotline</button>
+  <button role="tab" data-tab="awards" aria-selected="false">Awards</button>
+  <button role="tab" data-tab="settings" aria-selected="false">Settings</button>
+</nav>
+
+<section class="panel" id="p-watch" role="tabpanel">
+  <h2>Case finish</h2>
+  <div class="finishes" id="finishes"></div>
+  <h2>Readout</h2>
+  <dl class="spec-list" id="readout"></dl>
+  <h2>Paperwork</h2>
+  <div class="row-btns">
+    <button id="b-warranty">Warranty card</button>
+    <button id="b-engraving">Read the lid engraving</button>
+    <button id="b-manual">Owner’s manual</button>
+  </div>
+</section>
+
+<section class="panel" id="p-timers" role="tabpanel" hidden>
+  <div class="card">
+    <h2>Stopwatch</h2>
+    <div class="big-mono" id="sw-read">00:00.00</div>
+    <div class="row-btns"><button id="sw-start" class="pri">Start</button><button id="sw-lap">Lap</button><button id="sw-reset">Reset</button></div>
+    <ol class="laps" id="laps"></ol>
+  </div>
+  <div class="card">
+    <h2>Timer</h2>
+    <div class="big-mono" id="tm-read">05:00</div>
+    <div class="row-btns">
+      <button data-tm="-60">−1 min</button><button data-tm="60">+1 min</button><button data-tm="300">+5 min</button>
+      <button id="tm-start" class="pri">Start</button><button id="tm-reset">Reset</button>
+    </div>
+    <p class="fine">Timer accuracy is guaranteed to within one Gerald.</p>
+  </div>
+  <div class="card">
+    <h2>Alarms</h2>
+    <div class="row-btns"><input type="time" id="al-time" aria-label="Alarm time" value="07:00"><input type="text" id="al-label" placeholder="Label" maxlength="40" aria-label="Alarm label"><button id="al-add" class="pri">Add</button></div>
+    <ul class="alarms" id="alarms"></ul>
+    <p class="fine">Alarms ring only while this page is open. CINCO cannot wake a closed tab, and has stopped trying.</p>
+  </div>
+</section>
+
+<section class="panel" id="p-world" role="tabpanel" hidden>
+  <h2>World time</h2>
+  <ul class="world" id="world"></ul>
+  <p class="fine">Gerald Standard Time is UTC+5:55, give or take Gerald.</p>
+</section>
+
+<section class="panel" id="p-cinco" role="tabpanel" hidden>
+  <h2>CINCO Time Adjustment Services™</h2>
+  <p class="fine">Complimentary with every watch. Not available in any time.</p>
+  <div class="services" id="services"></div>
+  <h2>Also included</h2>
+  <div class="row-btns">
+    <button id="b-info" class="pri">▶ Play the infomercial</button>
+    <button id="b-recalls">Recall notices</button>
+    <button id="b-warranty2">Warranty</button>
+  </div>
+</section>
+
+<section class="panel" id="p-hotline" role="tabpanel" hidden>
+  <h2>CINCO Customer Support Hotline</h2>
+  <div class="phone">
+    <div class="phone-lcd"><div id="ph-line1">CINCO SUPPORT</div><div id="ph-line2">PRESS ANY KEY</div><div class="viz" id="viz"></div></div>
+    <div class="keypad" id="keypad"></div>
+    <div class="row-btns"><button id="ph-hold" class="pri">Hold for an operator</button><button id="ph-hang">Hang up</button></div>
+    <p class="hold-line" id="hold-line">Your call is important to us. Relatively speaking.</p>
+  </div>
+  <p class="fine">Nothing is dialled. No numbers exist. The hold music was composed by the watch, which is not a composer.</p>
+</section>
+
+<section class="panel" id="p-awards" role="tabpanel" hidden>
+  <h2>Achievements <span id="ach-count"></span></h2>
+  <ul class="ach" id="ach"></ul>
+</section>
+
+<section class="panel" id="p-settings" role="tabpanel" hidden>
+  <h2>Settings</h2>
+  <div class="settings" id="settings"></div>
+  <h2>App</h2>
+  <div class="row-btns">
+    <button id="b-install" class="pri">Install as app</button>
+    <button id="b-tilt">Enable tilt</button>
+    <button id="b-reset-ach">Reset achievements</button>
+    <button id="b-reset-all">Factory reset</button>
+  </div>
+  <p class="fine" id="install-note">Works offline once loaded. On iPhone: Share → Add to Home Screen.</p>
+  <p class="fine">A CINCO Corporation Product. A fictional parody made for Nick. Nothing is for sale. No card is charged, nothing ships, no number is dialled, and nothing links out.</p>
+</section>
+</main>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-card"><button class="modal-x" id="modal-x" aria-label="Close">×</button><h3 id="modal-title"></h3><div id="modal-body"></div></div>
+</div>
+<div class="hypno" id="hypno" hidden><div class="spiral" id="spiral"></div><p class="hypno-text" id="hypno-text">You are getting very sleepy…</p><p class="hypno-hint">Tap to wake, Sir</p></div>
+<div class="snooze" id="snooze" hidden><div class="zzz">Z<span>z</span><i>z</i></div><p id="snooze-text">Reality snoozed.</p><button id="snooze-wake">Resume reality early</button></div>
+<div class="ring" id="ring" hidden><p id="ring-text">ALARM</p><div class="row-btns"><button id="ring-stop" class="pri">Stop</button><button id="ring-snooze">Snooze reality</button></div></div>
+<label class="haptic-hack" aria-hidden="true"><input type="checkbox" switch id="hap" tabindex="-1"></label>
+<script src="js/data.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/render.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
